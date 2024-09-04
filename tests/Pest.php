@@ -11,10 +11,11 @@
 |
 */
 
-uses(
-    Tests\TestCase::class,
-    // Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+use App\Models\Account;
+use App\Models\User;
+use PHPUnit\Framework\ExpectationFailedException;
+
+uses(Tests\TestCase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +28,16 @@ uses(
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
+expect()->extend('toBePhoneNumber', function () {
+    expect($this->value)->toBeString()->toStartWith('+');
+
+    if (strlen($this->value) < 6) {
+        throw new ExpectationFailedException('Phone numbers must be at least 6 characters.');
+    }
+
+    if (! is_numeric(Str::of($this->value)->after('+')->remove([' ', '-'])->__toString())) {
+        throw new ExpectationFailedException('Phone numbers must be numeric.');
+    }
 });
 
 /*
@@ -42,7 +51,8 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function login($user = null)
 {
-    // ..
+    $account = Account::create(['name' => "harsha"]);
+    return test()->actingAs($user ?? User::factory()->create(['account_id' => $account->id]));
 }

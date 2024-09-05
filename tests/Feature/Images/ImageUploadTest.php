@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Storage;
 
+uses()->group('image');
+
 it('can show supported image formats and options', function ($path, $options) {
     Storage::fake()->put($path, file_get_contents(__DIR__ . "/../../fixtures/{$path}"));
 

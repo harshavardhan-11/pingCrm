@@ -3,6 +3,8 @@
 use App\Models\Contact;
 use function Pest\Faker\fake;
 
+uses()->group('contact');
+
 it('can store a contact', function (array $data) {
     login()->post('/contacts', [... [
         'first_name' => fake()->firstName,

@@ -36,6 +36,7 @@ class ContactsController extends Controller
 
     public function create(): Response
     {
+
         return Inertia::render('Contacts/Create', [
             'organizations' => Auth::user()->account
                 ->organizations()
